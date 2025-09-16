@@ -1,20 +1,33 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Badge } from "@/components/ui/badge"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Search, MapPin, Briefcase, GraduationCap, MessageCircle } from "lucide-react"
-import { StudentLayout } from "@/components/student-layout"
+import { useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+  Search,
+  MapPin,
+  Briefcase,
+  GraduationCap,
+  MessageCircle,
+} from "lucide-react";
+import { StudentLayout } from "@/components/student-layout";
+import Link from "next/link";
 
 export default function DiscoverPage() {
-  const [searchQuery, setSearchQuery] = useState("")
-  const [industryFilter, setIndustryFilter] = useState("all")
-  const [locationFilter, setLocationFilter] = useState("all")
-  const [graduationYearFilter, setGraduationYearFilter] = useState("all")
+  const [searchQuery, setSearchQuery] = useState("");
+  const [industryFilter, setIndustryFilter] = useState("all");
+  const [locationFilter, setLocationFilter] = useState("all");
+  const [graduationYearFilter, setGraduationYearFilter] = useState("all");
 
   // Mock alumni data
   const alumni = [
@@ -78,7 +91,12 @@ export default function DiscoverPage() {
       location: "San Francisco, CA",
       graduationYear: "2017",
       major: "Marketing",
-      skills: ["Digital Marketing", "Brand Strategy", "Analytics", "Leadership"],
+      skills: [
+        "Digital Marketing",
+        "Brand Strategy",
+        "Analytics",
+        "Leadership",
+      ],
       bio: "Building brand awareness and driving growth through innovative marketing strategies.",
       matchScore: 71,
       industry: "Technology",
@@ -96,7 +114,7 @@ export default function DiscoverPage() {
       matchScore: 68,
       industry: "Finance",
     },
-  ]
+  ];
 
   const filteredAlumni = alumni.filter((person) => {
     const matchesSearch =
@@ -104,21 +122,33 @@ export default function DiscoverPage() {
       person.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       person.company.toLowerCase().includes(searchQuery.toLowerCase()) ||
       person.role.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      person.skills.some((skill) => skill.toLowerCase().includes(searchQuery.toLowerCase()))
+      person.skills.some((skill) =>
+        skill.toLowerCase().includes(searchQuery.toLowerCase())
+      );
 
-    const matchesIndustry = industryFilter === "all" || person.industry === industryFilter
-    const matchesLocation = locationFilter === "all" || person.location.includes(locationFilter)
-    const matchesGradYear = graduationYearFilter === "all" || person.graduationYear === graduationYearFilter
+    const matchesIndustry =
+      industryFilter === "all" || person.industry === industryFilter;
+    const matchesLocation =
+      locationFilter === "all" || person.location.includes(locationFilter);
+    const matchesGradYear =
+      graduationYearFilter === "all" ||
+      person.graduationYear === graduationYearFilter;
 
-    return matchesSearch && matchesIndustry && matchesLocation && matchesGradYear
-  })
+    return (
+      matchesSearch && matchesIndustry && matchesLocation && matchesGradYear
+    );
+  });
 
   return (
     <StudentLayout>
       <div className="space-y-6">
         <div>
-          <h1 className="text-3xl font-bold text-foreground">Discover Alumni</h1>
-          <p className="text-muted-foreground">Connect with alumni who share your interests and career goals</p>
+          <h1 className="text-3xl font-bold text-foreground">
+            Discover Alumni
+          </h1>
+          <p className="text-muted-foreground">
+            Connect with alumni who share your interests and career goals
+          </p>
         </div>
 
         {/* Search and Filters */}
@@ -166,7 +196,10 @@ export default function DiscoverPage() {
                 </SelectContent>
               </Select>
 
-              <Select value={graduationYearFilter} onValueChange={setGraduationYearFilter}>
+              <Select
+                value={graduationYearFilter}
+                onValueChange={setGraduationYearFilter}
+              >
                 <SelectTrigger>
                   <SelectValue placeholder="Grad Year" />
                 </SelectTrigger>
@@ -188,18 +221,27 @@ export default function DiscoverPage() {
 
         {/* Results */}
         <div className="flex items-center justify-between">
-          <p className="text-muted-foreground">Found {filteredAlumni.length} alumni matching your criteria</p>
-          <Select defaultValue="match">
-            <SelectTrigger className="w-48">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="match">Sort by Match Score</SelectItem>
-              <SelectItem value="name">Sort by Name</SelectItem>
-              <SelectItem value="year">Sort by Graduation Year</SelectItem>
-              <SelectItem value="company">Sort by Company</SelectItem>
-            </SelectContent>
-          </Select>
+          <p className="text-muted-foreground">
+            Found {filteredAlumni.length} alumni matching your criteria
+          </p>
+          <div className="flex items-center gap-2">
+            <Button asChild variant="outline">
+              <Link href="/student/discover/map">
+                <MapPin className="h-4 w-4 mr-2" /> View Map
+              </Link>
+            </Button>
+            <Select defaultValue="match">
+              <SelectTrigger className="w-48">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="match">Sort by Match Score</SelectItem>
+                <SelectItem value="name">Sort by Name</SelectItem>
+                <SelectItem value="year">Sort by Graduation Year</SelectItem>
+                <SelectItem value="company">Sort by Company</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
         </div>
 
         {/* Alumni Grid */}
@@ -222,7 +264,9 @@ export default function DiscoverPage() {
                     </Avatar>
                     <div>
                       <CardTitle className="text-lg">{person.name}</CardTitle>
-                      <p className="text-sm text-muted-foreground">{person.role}</p>
+                      <p className="text-sm text-muted-foreground">
+                        {person.role}
+                      </p>
                     </div>
                   </div>
                   <Badge variant="outline" className="text-xs">
@@ -244,7 +288,9 @@ export default function DiscoverPage() {
                   Class of {person.graduationYear} • {person.major}
                 </div>
 
-                <p className="text-sm text-foreground line-clamp-2">{person.bio}</p>
+                <p className="text-sm text-foreground line-clamp-2">
+                  {person.bio}
+                </p>
 
                 <div className="flex flex-wrap gap-1">
                   {person.skills.slice(0, 3).map((skill) => (
@@ -276,14 +322,17 @@ export default function DiscoverPage() {
           <Card>
             <CardContent className="text-center py-12">
               <Search className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-foreground mb-2">No alumni found</h3>
+              <h3 className="text-lg font-medium text-foreground mb-2">
+                No alumni found
+              </h3>
               <p className="text-muted-foreground">
-                Try adjusting your search criteria or filters to find more alumni.
+                Try adjusting your search criteria or filters to find more
+                alumni.
               </p>
             </CardContent>
           </Card>
         )}
       </div>
     </StudentLayout>
-  )
+  );
 }
